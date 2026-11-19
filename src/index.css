@@ -1,15 +1,15 @@
 @import "tailwindcss";
 @import "@fontsource-variable/inter/opsz.css";
-@import "@fontsource-variable/archivo/wdth.css";
-@import "@fontsource-variable/jetbrains-mono/wght.css";
 
-/* El tema sigue al sistema. Neutros de la marca riqedev; colores de datos validados (skill dataviz). */
+/*
+ * Enerlytics tiene identidad propia, no la de riqedev: como los paneles de gestión de energía, neutros
+ * pizarra (gris azulado), barra lateral azul marino en ambos temas y un acento turquesa reservado para
+ * la navegación y el foco, nunca para datos. El tema sigue al sistema; colores de datos validados (skill dataviz).
+ */
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme inline {
   --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-brand: "Archivo Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -18,8 +18,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-ring: var(--ring);
-  --color-hud: var(--hud);
-  --color-hud-faint: var(--hud-faint);
+  --color-accent: var(--accent);
 
   /* Datos */
   --color-series-load: var(--series-load);
@@ -37,22 +36,22 @@
 
 :root {
   color-scheme: light;
-  --background: oklch(0.985 0.002 264);
-  --foreground: oklch(0.16 0 0);
+  --background: oklch(0.975 0.006 250);
+  --foreground: oklch(0.21 0.035 265);
   --card: oklch(1 0 0);
-  --muted: oklch(0.96 0 0);
-  --muted-foreground: oklch(0.48 0 0);
-  --border: oklch(0.9 0 0);
-  --ring: oklch(0.45 0 0);
-  --hud: oklch(0.16 0 0 / 60%);
-  --hud-faint: oklch(0.16 0 0 / 45%);
-  --shadow-card: 0 1px 2px oklch(0 0 0 / 4%), 0 14px 32px -18px oklch(0 0 0 / 16%);
+  --muted: oklch(0.955 0.008 250);
+  --muted-foreground: oklch(0.49 0.035 257);
+  --border: oklch(0.91 0.012 255);
+  --accent: oklch(0.6 0.11 185);
+  --ring: var(--accent);
+  --sidebar: oklch(0.22 0.035 262);
+  --shadow-card: 0 1px 2px oklch(0.25 0.04 262 / 5%), 0 14px 32px -18px oklch(0.25 0.04 262 / 18%);
 
   --series-load: #2a78d6;
   --series-process: #eb6834;
-  --grid: #e1e0d9;
-  --axis: #c3c2b7;
-  --band: oklch(0.16 0 0 / 5%);
+  --grid: #e2e8f0;
+  --axis: #cbd5e1;
+  --band: oklch(0.3 0.04 262 / 6%);
   --status-good: #0ca30c;
   --status-warning: #fab219;
   --status-critical: #d03b3b;
@@ -72,21 +71,20 @@
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.19 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.72 0 0);
-    --border: oklch(1 0 0 / 10%);
-    --ring: oklch(0.72 0 0);
-    --hud: oklch(0.985 0 0 / 58%);
-    --hud-faint: oklch(0.985 0 0 / 42%);
+    --background: oklch(0.17 0.02 262);
+    --foreground: oklch(0.97 0.005 250);
+    --card: oklch(0.21 0.025 262);
+    --muted: oklch(0.27 0.025 262);
+    --muted-foreground: oklch(0.72 0.03 255);
+    --border: oklch(1 0 0 / 9%);
+    --accent: oklch(0.75 0.12 185);
+    --sidebar: oklch(0.19 0.035 262);
     --shadow-card: inset 0 1px 0 0 oklch(1 0 0 / 6%), 0 18px 40px -22px oklch(0 0 0 / 75%);
 
     --series-load: #3987e5;
     --series-process: #d95926;
-    --grid: #2c2c2a;
-    --axis: #383835;
+    --grid: #262e3b;
+    --axis: #364052;
     --band: oklch(1 0 0 / 5%);
     --good-text: #0ca30c;
 
@@ -102,13 +100,16 @@
   }
 }
 
-@utility osd {
-  font-family: var(--font-brand);
-  font-stretch: 84%;
-  font-weight: 540;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* Barra lateral y cabecera móvil: azul marino con tinta clara en ambos temas. */
+.sidebar {
+  --foreground: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.76 0.03 255);
+  --muted: oklch(1 0 0 / 9%);
+  --border: oklch(1 0 0 / 10%);
+  --ring: oklch(0.75 0.12 185);
+  --accent: oklch(0.75 0.12 185);
+  background-color: var(--sidebar);
+  color: var(--foreground);
 }
 
 @utility surface {

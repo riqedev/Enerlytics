@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CalendarDays, ChartColumn, Download, LayoutDashboard, Receipt, SlidersHorizontal, TriangleAlert } from "lucide-react";
+import { CalendarDays, ChartColumn, Download, LayoutDashboard, Receipt, SlidersHorizontal, TriangleAlert, Zap } from "lucide-react";
 import type { Route } from "@/lib/route";
 import { ANOMALIES, BASE, MONTH } from "@/lib/data";
 import { download, monthCsv } from "@/lib/csv";
@@ -30,7 +30,7 @@ function NavLink({ route, icon: Icon, active, compact }: { route: Route; icon: t
         active ? "bg-muted font-medium text-foreground" : "text-muted-foreground hover:bg-muted/60 hover:text-foreground",
       )}
     >
-      <Icon size={16} aria-hidden="true" className="shrink-0" />
+      <Icon size={16} aria-hidden="true" className={cn("shrink-0", active && "text-accent")} />
       {t.nav[route]}
       {route === "anomalies" && ANOMALIES.length > 0 && (
         <span className="ml-auto rounded-full bg-foreground/10 px-1.5 text-xs tabular-nums">{ANOMALIES.length}</span>
@@ -47,7 +47,7 @@ function LocaleToggle() {
       type="button"
       onClick={() => setLocale(locale === "es" ? "en" : "es")}
       aria-label={t.switchTo}
-      className="osd pressable h-8 rounded-md px-2.5 text-[11px] text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
+      className="pressable h-8 rounded-md px-2.5 text-xs font-medium text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/60"
     >
       {locale.toUpperCase()}
     </button>
@@ -57,9 +57,14 @@ function LocaleToggle() {
 const Brand = () => {
   const t = useT();
   return (
-    <div className="flex flex-col">
-      <span className="text-base font-semibold tracking-tight">Enerlytics</span>
-      <span className="text-xs text-muted-foreground">{t.plant}</span>
+    <div className="flex items-center gap-2.5">
+      <span aria-hidden="true" className="grid size-8 shrink-0 place-items-center rounded-lg bg-accent/15 text-accent">
+        <Zap size={16} className="fill-current" />
+      </span>
+      <div className="flex flex-col">
+        <span className="text-base font-semibold tracking-tight">Enerlytics</span>
+        <span className="text-xs text-muted-foreground">{t.plant}</span>
+      </div>
     </div>
   );
 };
@@ -72,7 +77,7 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_minmax(0,1fr)]">
       {/* Barra lateral (escritorio) */}
-      <aside className="sticky top-0 hidden h-dvh flex-col gap-6 border-r border-border bg-card/40 px-4 py-6 lg:flex">
+      <aside className="sidebar sticky top-0 hidden h-dvh flex-col gap-6 px-4 py-6 lg:flex">
         <div className="px-3">
           <Brand />
         </div>
@@ -82,7 +87,7 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
           ))}
         </nav>
         <div className="mt-auto flex flex-col gap-3 px-3 text-xs text-muted-foreground">
-          <span className="osd w-fit rounded-xs border border-border px-1.5 py-px text-[10px] text-hud">{t.simulated}</span>
+          <span className="w-fit rounded-full border border-border px-2 py-0.5 text-[11px] font-medium">{t.simulated}</span>
           <p className="leading-relaxed">{t.footer}</p>
           <div className="flex items-center justify-between">
             <span>
@@ -98,7 +103,7 @@ export function Shell({ route, children }: { route: Route; children: ReactNode }
 
       <div className="flex min-w-0 flex-col">
         {/* Cabecera móvil: marca + pestañas desplazables */}
-        <div className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur lg:hidden">
+        <div className="sidebar sticky top-0 z-30 lg:hidden">
           <div className="flex items-center justify-between px-4 pt-3">
             <Brand />
             <LocaleToggle />

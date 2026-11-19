@@ -53,7 +53,7 @@ export function Heatmap({ month, base, selected, onSelect }: {
               <span key={h} className="relative text-center tabular-nums">
                 {h % 3 === 0 ? String(h).padStart(2, "0") : ""}
                 {h === TARIFF.peakHours[0] && (
-                  <span className="osd absolute -top-4 left-0 text-[9px] whitespace-nowrap text-hud">{t.peakBand}</span>
+                  <span className="absolute -top-4 left-0 text-[10px] font-medium whitespace-nowrap text-muted-foreground">{t.peakBand}</span>
                 )}
               </span>
             ))}

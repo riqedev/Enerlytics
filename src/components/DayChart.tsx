@@ -100,7 +100,7 @@ export function DayChart({ day, base, process, start }: {
                 <text
                   x={PAD.left + peakHours[0] * col + 4}
                   y={PAD.top - 7}
-                  className="osd fill-muted-foreground text-[9px]"
+                  className="fill-muted-foreground text-[10px] font-medium"
                 >
                   {t.peakBand}
                 </text>
