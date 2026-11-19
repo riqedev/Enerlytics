@@ -26,8 +26,8 @@ const topRounded = (x: number, y: number, w: number, h: number, r: number) => {
 export function DayChart({ day, base, process, start }: {
   day: Day;
   base: Baseline;
-  process: Process;
-  start: number;
+  process?: Process;
+  start?: number;
 }) {
   const t = useT();
   const { locale } = useLocale();
@@ -44,7 +44,7 @@ export function DayChart({ day, base, process, start }: {
     return () => ro.disconnect();
   }, []);
 
-  const proc = (h: number) => (h >= start && h < start + process.hours ? process.kw : 0);
+  const proc = (h: number) => (process && start !== undefined && h >= start && h < start + process.hours ? process.kw : 0);
   const expected = day.kw.map((_, h) => base.expected(day, h));
   const top = Math.max(TARIFF.contractedKw * 1.1, ...day.kw.map((v, h) => v + proc(h)), ...expected);
   const step = niceStep(top);
@@ -66,9 +66,11 @@ export function DayChart({ day, base, process, start }: {
         <span className="flex items-center gap-1.5">
           <Swatch className="bg-series-load" /> {t.actual}
         </span>
-        <span className="flex items-center gap-1.5">
-          <Swatch className="bg-series-process" /> {t.process}
-        </span>
+        {process && (
+          <span className="flex items-center gap-1.5">
+            <Swatch className="bg-series-process" /> {t.process}
+          </span>
+        )}
         <span className="flex items-center gap-1.5">
           <span aria-hidden="true" className="h-0.5 w-3 bg-foreground/60" /> {t.expected}
         </span>
@@ -242,7 +244,7 @@ export function DayChart({ day, base, process, start }: {
                 <th className="px-3 py-2 font-medium">{t.hourCol}</th>
                 <th className="px-3 py-2 text-right font-medium">{t.actual} (kW)</th>
                 <th className="px-3 py-2 text-right font-medium">{t.expected} (kW)</th>
-                <th className="px-3 py-2 text-right font-medium">{t.process} (kW)</th>
+                {process && <th className="px-3 py-2 text-right font-medium">{t.process} (kW)</th>}
               </tr>
             </thead>
             <tbody>
@@ -254,7 +256,7 @@ export function DayChart({ day, base, process, start }: {
                   </td>
                   <td className="px-3 py-1.5 text-right">{fmtNumber(locale, v)}</td>
                   <td className="px-3 py-1.5 text-right">{fmtNumber(locale, expected[h])}</td>
-                  <td className="px-3 py-1.5 text-right">{proc(h) ? fmtNumber(locale, proc(h)) : "—"}</td>
+                  {process && <td className="px-3 py-1.5 text-right">{proc(h) ? fmtNumber(locale, proc(h)) : "—"}</td>}
                 </tr>
               ))}
             </tbody>

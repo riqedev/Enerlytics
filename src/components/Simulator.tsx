@@ -34,21 +34,16 @@ const Slider = ({ label, value, min, max, step = 1, display, onChange }: {
   </label>
 );
 
-export function Simulator({ preset, process, start, options, best, onPreset, onProcess, onStart }: {
+/** Qué proceso y a qué hora. */
+export function SimControls({ preset, process, start, onPreset, onProcess, onStart }: {
   preset: PresetId;
   process: Process;
   start: number;
-  options: Placement[];
-  best: Placement;
   onPreset: (p: PresetId) => void;
   onProcess: (p: Process) => void;
   onStart: (s: number) => void;
 }) {
   const t = useT();
-  const { locale } = useLocale();
-  const [hover, setHover] = useState<number | null>(null);
-  const current = options[Math.min(start, options.length - 1)];
-  const maxCost = Math.max(...options.map((o) => o.cost));
   const ids: PresetId[] = ["compressor", "oven", "ev", "custom"];
 
   return (
@@ -56,7 +51,7 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
       {/* Proceso */}
       <div className="flex flex-col gap-3">
         <span className="text-sm text-muted-foreground">{t.presets}</span>
-        <div role="radiogroup" aria-label={t.presets} className="flex flex-wrap gap-1.5">
+        <div role="radiogroup" aria-label={t.presets} className="grid grid-cols-2 gap-1.5">
           {ids.map((id) => {
             const p = id === "custom" ? null : PRESETS[id];
             return (
@@ -85,7 +80,7 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-3">
+      <div className="flex flex-col gap-5">
         {preset === "custom" && (
           <>
             <Slider
@@ -107,7 +102,7 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
             />
           </>
         )}
-        <div className={cn(preset === "custom" ? "" : "sm:col-span-3")}>
+        <div>
           <Slider
             label={t.start}
             value={start}
@@ -118,7 +113,26 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
           />
         </div>
       </div>
+    </div>
+  );
+}
 
+/** El costo de cada hora de inicio y el resultado de la elegida. */
+export function SimOutcome({ process, start, options, best, onStart }: {
+  process: Process;
+  start: number;
+  options: Placement[];
+  best: Placement;
+  onStart: (s: number) => void;
+}) {
+  const t = useT();
+  const { locale } = useLocale();
+  const [hover, setHover] = useState<number | null>(null);
+  const current = options[Math.min(start, options.length - 1)];
+  const maxCost = Math.max(...options.map((o) => o.cost));
+
+  return (
+    <div className="flex flex-col gap-6">
       {/* Costo según hora de inicio: el paisaje completo, no solo el punto elegido */}
       <div>
         <div className="mb-2 flex items-baseline justify-between gap-3">
@@ -165,6 +179,12 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
             <span>18</span>
             <span>{String(24 - process.hours).padStart(2, "0")}</span>
           </div>
+          {options.some((o) => o.overLimit) && (
+            <div className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <span aria-hidden="true" className="size-2.5 rounded-[3px] bg-status-critical/45" />
+              {t.overLimit}
+            </div>
+          )}
           {hover !== null && (
             <div
               className="pointer-events-none absolute -top-2 z-20 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-card px-3 py-2 text-xs whitespace-nowrap shadow-lg"
@@ -189,7 +209,7 @@ export function Simulator({ preset, process, start, options, best, onPreset, onP
           </span>
         </div>
         <div className="flex flex-col gap-1.5 text-sm sm:items-end">
-          <span className="flex items-center gap-1.5">
+          <span className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5">
             {current.overLimit ? (
               <CircleAlert size={15} aria-hidden="true" className="text-status-critical" />
             ) : (

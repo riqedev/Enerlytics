@@ -2,6 +2,16 @@
 
 Dashboard de energía de una planta industrial simulada. Responde tres preguntas: **cuánto se consumió y cuánto costó**, **qué horas se salieron de lo normal** y **a qué hora conviene correr un proceso nuevo**.
 
+## Secciones
+
+Estructura estándar de dashboard: barra lateral con secciones, barra superior con período y exportación.
+
+- **Resumen:** indicadores del mes, energía diaria contra lo esperado, desglose del costo y las anomalías que más costaron.
+- **Consumo:** detalle por hora del día elegido y mapa de calor del mes como selector.
+- **Anomalías:** tabla de eventos con desviación, energía, impacto en la cuenta y efecto en la demanda.
+- **Simulador:** proceso, día y hora de inicio; costo extra del mes para cada horario.
+- **Tarifa:** cargos de la tarifa de ejemplo y cómo se arma la cuenta.
+
 ## Qué hace
 
 - **Mes simulado y reproducible:** 30 días de consumo por hora de una planta con dos turnos, sábado corto, domingo de carga base y un feriado. Se genera con una semilla fija (PRNG `mulberry32`), así que los datos son los mismos en cada visita. Trae cuatro eventos plantados a propósito para que la detección tenga algo real que encontrar.

@@ -24,7 +24,7 @@ export function Kpis({ bill, loadFactor }: { bill: Bill; loadFactor: number }) {
   const maxPct = bill.maxKw / TARIFF.contractedKw;
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-5">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       <Tile label={t.energy} value={fmtNumber(locale, bill.energyKwh / 1000, 1)} unit="MWh" />
 
       <Tile label={t.cost} value={fmtClp(locale, bill.total, true)}>
@@ -47,10 +47,6 @@ export function Kpis({ bill, loadFactor }: { bill: Bill; loadFactor: number }) {
           {maxPct > 1 && <CircleAlert size={13} aria-hidden="true" className="shrink-0 text-status-critical" />}
           {fmtNumber(locale, maxPct * 100)}% {t.ofLimit(`${fmtNumber(locale, TARIFF.contractedKw)} kW`)}
         </span>
-      </Tile>
-
-      <Tile label={t.peakDemand} value={fmtNumber(locale, bill.peakKw)} unit="kW">
-        {t.peakHint}
       </Tile>
 
       <Tile label={t.loadFactor} value={`${fmtNumber(locale, loadFactor * 100)}%`}>
